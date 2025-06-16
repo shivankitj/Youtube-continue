@@ -1,5 +1,5 @@
 import { Router } from "express"
-import {loginUser, logoutUser, registerUser,refreshAccessToken} from "../controllers/user.controller.js";
+import {loginUser, logoutUser, registerUser,refreshAccessToken, updateFiles} from "../controllers/user.controller.js";
 import { upload } from "../middleware/multer.middleware.js";
 import { verifyJWT } from "../middleware/auth.middleware.js";
 
@@ -31,7 +31,19 @@ userRouter.route("/logout").post(verifyJWT,logoutUser)
 // kyoki humne middle ware me next likh rakha hai
 
 userRouter.route("/refresh-token").post(refreshAccessToken);
-
+userRouter.post("/updateFiles",
+    upload.fields(
+    [
+        {
+            name: "avatar",
+            maxCount: 1
+        },
+        {
+            name: "coverImage",
+            maxCount: 1  
+        }
+    ]
+) ,updateFiles);
 
 
 export default userRouter;
