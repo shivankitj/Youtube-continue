@@ -1,7 +1,21 @@
 import { Router } from "express"
-import {loginUser, logoutUser, registerUser,refreshAccessToken, updateFiles} from "../controllers/user.controller.js";
+import {    
+    loginUser,
+    logoutUser,
+    registerUser,
+    refreshAccessToken,
+    updateFiles, 
+    changeCurrentPassword,
+    getCurrentUser, 
+    updateUserAvatar, 
+    updateAccountDetails, 
+    getUserChannelProfile, 
+    getWatchHistory
+    } from "../controllers/user.controller.js";
 import { upload } from "../middleware/multer.middleware.js";
 import { verifyJWT } from "../middleware/auth.middleware.js";
+import { verify } from "jsonwebtoken";
+import { get } from "mongoose";
 
 const userRouter= Router();
 
@@ -31,7 +45,7 @@ userRouter.route("/logout").post(verifyJWT,logoutUser)
 // kyoki humne middle ware me next likh rakha hai
 
 userRouter.route("/refresh-token").post(refreshAccessToken);
-userRouter.post("/updateFiles",
+userRouter.route("/updateFiles").patch(verifyJWT,
     upload.fields(
     [
         {
@@ -45,6 +59,19 @@ userRouter.post("/updateFiles",
     ]
 ) ,updateFiles);
 
+userRouter.route("/change-assword").post(verifyJWT ,changeCurrentPassword);
+userRouter.route("/cureent-user").post(verifyJWT,getCurrentUser);
+userRouter.route("/update-account").patch(verifyJWT,updateAccountDetails)
+userRouter.route("/update-avatar")
+.patch(
+    verifyJWT,
+    upload.single("avatar"),
+    updateUserAvatar
+    );
+    
+userRouter.route("/c/:username").get(verify,getUserChannelProfile)
+// username params se le rahe hai 
+userRouter.route("/history").get(verifyJWT,getWatchHistory);
 
 export default userRouter;
 

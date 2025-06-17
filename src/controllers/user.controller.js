@@ -396,7 +396,7 @@ const getUserChannelProfile= asyncHandler( async (req,res)=>{
     const channel = User.aggregate([
         {
             $match: {
-                userName: userName?.toLowerCase();
+                userName: userName?.toLowerCase()
             }
         },
         {
@@ -420,7 +420,7 @@ const getUserChannelProfile= asyncHandler( async (req,res)=>{
         {
             $addFields:{
                 subscriberCount: {
-                    $size:"$subscribers";
+                    $size:"$subscribers"
                 },
                 
                 channelSubscribedToCount: {
@@ -467,7 +467,7 @@ const getWatchHistory = asyncHandler(async(req,res)=>{
         {
             $match: {
                 // _id: req.user._id  WRONG (mongoose yaha pe kaam nahi karta hai)
-                _id: new mongoose.Types.ObjectId(req.user._id);
+                _id: new mongoose.Types.ObjectId(req.user._id)
             },
             $lookup:{
                 from: "videos",
@@ -503,14 +503,14 @@ const getWatchHistory = asyncHandler(async(req,res)=>{
                 ]
             }
         }
-    ])
+    ]);
 
     return res.status(200)
     .json(new ApiResponse(
         200,
         user[0].watchHistory,
-        "watch histroy fetched successfully."));
-})
+        "watch histroy fetched successfully."))
+});
 
 export {
     registerUser,
